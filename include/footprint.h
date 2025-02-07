@@ -1,27 +1,11 @@
 #pragma once
-#include <cstdint>
-#include <string>
+#include "trade.h"
+#include "json.hpp"
 #include <map>
-#include <vector>
-#include <memory>
+#include <string>
 #include <cmath>
 
-struct Trade {
-    int64_t id;
-    double price;
-    double qty;
-    double quote_qty;
-    int64_t time;
-    bool is_buyer_maker;
-    bool isBuy;
-    double size;
-
-    bool operator<(const Trade& other) const {
-        if (time == other.time) return id < other.id;
-        return time < other.time;
-    }
-};
-
+namespace trading {
 
 class FootprintBar {
 public:
@@ -38,13 +22,13 @@ public:
         int pricePrecision{0};
 
         PriceLevel(int vp = 0, int pp = 0)
-                : volumePrecision(vp), pricePrecision(pp) {}
+            : volumePrecision(vp), pricePrecision(pp) {}
 
         std::string toJson() const;
     };
 
     FootprintBar(int duration = 0, int scale = 0,
-                 int volumePrecision = 0, int pricePrecision = 0);
+                int volumePrecision = 0, int pricePrecision = 0);
 
     bool handleTick(const Trade& tick);
     void endHandleTick();
@@ -73,5 +57,6 @@ private:
     double getPriceLevelHeight();
     double normalizePrice(double price);
     void fillNoTradesPriceLevels();
-    void sortPriceLevels();
 };
+
+} // namespace trading 
